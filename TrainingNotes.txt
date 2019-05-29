@@ -1,0 +1,1222 @@
+16/04/19
+---------
+Day-1
+---------
+Javascript
+===========
+
+function ---> arrow functions
+
+function add(){
+
+}
+
+()=>{}
+
+DOM objects- Inside of web browsers- document, windows , history
+
+console.log()
+
+console is an object and log is method there
+
+setTimeout()>> window object
+
+setInterval()>> window object
+
+windows object is about web browser whereas dom is for HTML pages/elements
+
+callback functions 
+------------------
+A callback function is a function passed into another function as an argument,
+which is then invoked inside the outer function to complete some kind of routine or action
+ 
+setTimeout(function(){..}, 2000)
+ 
+Here 2000 ms means hold the callback for 2 sec and then give it for execution.
+ 
+ 
+Inbuilt asynchronous function
+-----------------------------
+setTimeout()
+setInterval()
+
+
+NOTE: javascript engine = interpreter + JIT
+Browser-> JS engine(based on ecmascript specification)
+--> specific to browser
+
+
+Web browser application (web APIs) + JS Engine 
+
+#web 2.0 -> web pages should load contents on page asynchronously.
+->Pioneered by google...example suggestions in searching.
+
+  
+#XMLHttpRequest/XMLHttp is the object that promoted the async behaviour in the web pages
+
+NodeJs is platform/env used for executing javascript code.
+
+JS Engine + Node APIs(module) = Node platform/env
+
+ 
+Note JS engine for web browsers is for HTML pages , 
+but JS engine in NODE is used for porocessing networking / db connection, files system but not HTML pages.  
+
+
+***
+NodeJs is good when the processing of data is minimal.
+***
+JS Code---> JS Engine ---> Machine code  
+  
+Browser -> engine  
+Edge-> chakra
+Mozilla->spider monkey
+Chrome-> V8  
+
+
+Ryan Dahl inventor
+NodeJs is based on V8
+
+
+Node is good for data intensive , real time applications that run across distributed devices.
+
+Node is Javascript on the server
+
+v8 + c++ = Node.exe
+
+V8 is open source runtime engine written in c++
+
+
+**Different in Node
+
+-> Node is evented I/O for javascript.
+-> Non Blocking I/O queue
+
+Two ways for web servers working:
+1. Conventional like ,Tomcat-> create multiple threads to handle incoming connection requests
+2. Node -> Use a single non- blocking thread with an event loop.
+ 
+
+Scale up application-> implement cluster -> deploy multiple instances of applications.
+
+Scalability and related terms????
+
+Limitations of Multi-Threaded Model:
+
+->DeadLock, Race conditions
+
+
+Note: > node 
+invokes RPEL
+
+C:\Node\NodeBasicsApp>node
+> console.log('hello')
+hello
+undefined
+> function add(){}
+undefined
+> function add(a,b){return a+b};
+undefined
+> add(1,1)
+
+
+## Run the node application
+>node app.js
+OR
+>node app
+
+
+#console.log(window)
+
+console.log(window);
+ReferenceError: window is not defined
+
+Note node doesn't support DOM objects-
+
+========================================
+
+Global and Module level scopes
+================================
+console is available in Global
+global.console.log("Addition=" +add(1,2));// will work perfectly
+
+Global(Top level object)----> wrt browser it is equivalent to window.
+Available under Global:
+console()
+setTimeout()
+
+Note: var/let/const are available
+, last 2 es 6
+
+let x = 10;
+global.console.log("value of x ->"+global.x);
+//undefined
+
+Note x is present in module scope but not in global scope.
+
+app.js
+------
+
+function add(a,b){
+    return a + b;
+}
+
+global.console.log("Addition=" +add(1,2));
+
+global.setTimeout(() => {
+    global.console.log("message after 2 sec")
+}, 2000);
+
+let x = 10;
+global.console.log("value of x ->"+x);
+
+global.console.log("value of fun" + add(2,2));
+
+
+
+===========================================================================================
+17/04/2019
+==================
+Day-2
+-------
+
+Every .js file is module(container).
+
+
+require('math');//by default - it search module file in node_module
+
+math.js
+-------
+console.log('Within the math.js file');
+PI = 3.1415;
+console.log(PI);
+module.exports.PI = PI;
+
+function area(radius){
+    return PI * radius *radius;
+}
+
+console.log("Area of circle = " +area(2));
+module.exports.calArea = area;
+
+
+
+
+// module{
+//         exports:{
+//             PI:PI,
+//             calArea : area
+//         }
+
+// };
+
+app.js
+------
+
+//Load the module -require
+
+const x= require('./math');
+
+console.log(x);
+
+-------------
+
+
+module.exports=function(x,y){
+    return x+y;
+}
+
+o/p:[Function]
+**
+console.log(y(10,20));
+O/p: 30
+
+-----------------
+exports.greet = 'Welcome to modules';
+
+o/p:{greet: 'Welcome to modules'}
+------------------
+Valid Syntax
+--------------
+module.exports.calArea = area;
+exports.greet = 'Welcome to modules';
+module.exports=function(x,y){
+    return x+y;
+}
+
+
+INVALID SYNTAX
+---------------
+exports = function add(a,b){
+    return a+b;
+}
+
+-----------------------------------
+Types of Modules
+=================
+1.Local Modules
+2.Node API - Core Modules(filesyste(fs), OS, path,HTTP)
+3.Third party module - npm (Node Package manage) used for download.
+Ex: validator.js , joi.js, chalk.js
+
+=========================
+Application work flow
+
+
+--------------------------
+
+
+validator npm, express- validator, mongooses validator
+
+for global installion npm install -g it goes to main node package
+
+NOTE: before downloading 3rd party , do 
+npm init
+it create
+package.json---> configuration file
+------------
+{
+  "name": "nodebasicsapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
+npm install validator --save
+Yargs--> Cmd line capabilities
+npm i yargs
+npm install -g nodemon
+
+npm install validator --save
+--save make entry into package.json--> 
+---
+Final code
+
+app.js
+------
+console.log('app loaded');
+const store = require('./bookstore');
+
+index.js
+--------
+//load other modules
+console.log('index loaded');
+
+const shelf = require('./bookshelf');
+const mymodule = require('./mymodule');
+
+
+shelf.add('C++', 'Pressman');
+
+module.exports.m1 = "Message is :" + mymodule.message1;
+module.exports.m2 = "Message is :" + mymodule.message2;
+
+
+mymodule.js
+-----------
+console.log('mymodule loaded');
+module.exports.message1 = 'This module is from mymodule';
+module.exports.message2 = 'This module is from mymodule2';
+
+bookshelf.js
+------------
+console.log('bookshelf loaded');
+const fs = require('fs');
+
+module.exports.add = function (title, author) {
+    //add a new book in database
+    fs.writeFileSync('bookshelf.txt', 'Writing the file ');
+    console.log('Book added to shelf');
+}
+
+module.exports.remove = (title) => {
+    //remove in database
+    console.log('Book removed from shelf');
+}
+
+module.exports.list = () => {
+    //remove in database
+    console.log('Book List Displayed from the shelf');
+}
+
+module.exports.search = (title) => {
+    //remove in database
+    console.log('Details of BOOK:' + title);
+}
+
+
+=================================================================================================================
+18/04/2019
+-----------
+Day-3
+-----------
+npm install yargs@12.0.2
+
+Blocking/Non-Blocking 
+Synchronous/Asynchronous
+
+Async works better at:
+1.Network call 
+2.Disk call 
+
+Note: 
+JS is single threaded .
+
+
+========
+Diagram2
+========
+
+Node application is single threaded model which is taking multiple request using a single thread.
+
+EventLoop/Non-blocking I/O
+-> 
+
+
+non-blocking code- asynchronous
+--------------------------------
+//Non- blocking code
+console.log('Before');
+setTimeout(() =>
+    console.log("Performing db activity")
+    , 2000);
+console.log('After')
+
+
+
+===================
+//Non- blocking code
+console.log('Before');
+// setTimeout(() =>
+//     console.log("Performing db activity")
+//     , 2000);
+
+const user = getUser(1);
+
+console.log("Object: " + user);
+//o/p: undefined 
+console.log('After')
+
+//Design a asynchronous code - user id and get an object
+
+function getUser(id) {
+    setTimeout(() => {
+        console.log("Performing db activity")
+        return { id: id, gitHubUser: 'priyanka' };
+    }, 2000);
+
+}
+==================
+console.log("Object: " + user);
+//o/p: undefined 
+
+Asynchronous code so user is coming undefined.
+
+We need to solve it.
+Solution:
+1. Callback
+2. Implement promise object
+3. Async/ await 
+
+
+
+1. Callback 
+-----------
+//Non- blocking code
+console.log('Before');
+
+getUser(1, function (user) {
+    console.log(user);
+});
+ 
+console.log('After')
+
+//Design a asynchronous code - user id and get an object
+
+function getUser(id, callback) {
+    setTimeout(() => {
+        console.log("Performing db activity")
+        callback({ id: id, gitHubUser: 'priyanka' });
+    }, 2000);
+
+}
+
+//Multiple callbacks
+---------------------
+/*
+    Non- blocking code
+    getUser
+    getRepository
+
+    getUsers -->pass username -->getRepository
+
+*/
+console.log('Before');
+
+getUser(1, function (user) {
+    getRepository(user.gitHubUser, function(repos){
+            console.log(repos[0]);
+    });
+});
+
+
+// getUser(1, function (user) {
+//     console.log(user);
+// });
+ 
+// getRepository('chandan', function(repos){
+//     console.log(repos);
+// })
+
+console.log('After')
+
+//Design a asynchronous code - user id and get an object
+
+function getUser(id, callback) {
+    setTimeout(() => {
+        console.log("Performing db activity")
+        callback({ id: id, gitHubUser: 'priyanka' });
+    }, 2000);
+
+}
+
+
+function getRepository(username, callback){
+    setTimeout(() => {
+        console.log("Connect to Github Repository and get repository name")
+        callback(['repo1', 'repo2', 'repo3'] );
+    }, 2000);
+
+}
+
+----------------------------------------------------------------------------------
+Callback and arrow function:
+----------------------------
+//Note x is refence to a function
+// x--> (a,b)=>a+b;
+//Callback is a function which is calling another function is callback
+//Filteration is the highly applicable form of callback
+
+function operation(a, b, x) {
+    y = x(a, b);
+    console.log(y);
+}
+
+
+operation(30, 20, (a, b) => a + b);
+operation(30, 20, (a, b) => a * b);
+operation(30, 20, (a, b) => a / b);
+operation(30, 20, (a, b) => a - b);
+
+
+Callback Hell:
+===============
+============================================================================================================================================
+22/04/2019
+-----------
+
+index.js
+//process object is used for dealing with cmd line arguments
+
+console.log(processs.argv)
+console.log(process)
+
+>node index "john" "jin"
+
+--> yargs are used to handle cmd line args in node js
+
+
+Note:  node index add --title = "myTitle"
+  cmd  options(action)
+
+Note .command(builder -> Used for creating options).(handler-> action to be taken).
+All the above are covered in yargs example, 1st .pdf of email
+
+
+Basically its synchronous code
+--------------------------
+
+JS is single threaded , synchronosed and blocking coded.
+
+func a(){
+b()
+}
+
+func b(){
+c();
+}
+
+a();
+---> a --> b--> calArea
+
+
+Making async code
+===========================
+const listLocation = (location)=>{
+locations.forEach(location)=>{
+console.log(location)
+}
+}
+
+
+
+
+6.console.log()       |
+5.annonymouns()       |
+4.forEach()           |
+3.annonymouns()       | 
+2.listLocation(array) | 
+1.main()              | 
+----------------------|
+Call Stack
+----------------------|
+
+It will execute like 6->5->4->3->2->1 (i.e pop stack).
+The above is synchronous call.
+   
+Now
+----
+
+console.log("Starting up");
+
+setTimeout(() => {
+    console.log("Two seconds");
+}, 2000)
+
+setTimeout(() => {
+    console.log("Zero seconds");
+}, 0)
+
+console.log("Finishing");
+
+
+Now 
+4.console.log('finh') |-> will execute immediately                              
+3.setTimeOut(0 sec)   |-> will go to Node api space*
+3.setTimeOut(2 sec)   |-> will go to Node api space* 
+2.console.log('start')|-> will execute immediately 
+1.main()              | 
+----------------------|                                                   
+Call Stack            |
+----------------------|
+
+
+
+setTimeOut(2sec)
+----------------------|
+Node APIs             | 
+----------------------|
+
+
+
+setTimeOut(0sec)
+----------------------|
+Callback Queue             | 
+----------------------|
+
+
+=> when call stack is free than setTimeOut(0sec) goes to call stack.
+
+Note: Event is trigger/noise/change of state, which make appl take some action.
+
+
+Execution process
+-------------------
+* after execution is complete in Node api space for async methods(setTimeOut(0sec)), 
+=>it will go to callback queue -> will stay there till call stack is empty, 
+when the call stack is free than only the specified method will go to the call stack.
+
+=> Note every event is attached with callback.
+
+
+
+================
+##Promise
+================
+
+->Eventually getting result from a asynchronous operation
+
+function(){
+
+
+Promise p = new Promise();
+//DB connection
+//row = select * from emp;
+
+if(row!= null){
+return promise(row);
+}
+else{
+return promise(error);
+}
+}
+
+
+//consume promise
+.then(promise(function(data/resolve){console.log(data)}, function(error){console.log(error)})
+
+//Promise Implementation
+-------------------------
+/*
+    Non- blocking code
+    getUser
+    getRepository
+
+    getUsers -->pass username -->getRepository
+
+*/
+
+
+
+console.log('Before');
+
+//Original version
+// const p = getUser(1);
+// const r = p.then(user => getRepository(user.username));
+// r.then(repos => console.log(repos));
+
+//Siplified version 
+getUser(1)
+    .then(user => getRepository(user.name))
+    .then(repos => getCommit(repos[0]))
+    .then(result => console.log(result))
+    .catch(error => console.log(error.message));
+
+
+
+//Design a asynchronous code - user id and get an object
+
+function getUser(id) {
+    return new Promise((resolve, reject) => {
+
+        setTimeout(() => {
+            console.log("Performing db activity")
+            resolve({ id: id, gitHubUser: 'priyanka' });
+            reject("Error- user");
+        }, 2000);
+    });
+}
+
+
+function getRepository(username) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log("Connect to Github Repository and get repository name")
+            resolve(['repo1', 'repo2', 'repo3']);
+            //  reject("Error- repository");
+        }, 5000);
+
+    });
+
+}
+
+function getCommit(reponame) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log("Commiting the repo")
+            resolve("Data to be commited for repo =>" + reponame);
+            //  reject("Error- repository");
+        }, 6000);
+
+    });
+
+}
+
+
+
+console.log('After')
+
+====================================================================================================================================================
+23/04/2019
+----------
+Day-4
+----------
+Note: ending with 'sync' example writeFileSync, are synchronous function.
+
+Lab 3
+
+index.js
+--------
+
+const fs = require('fs');
+
+console.log('Start');
+// Synchronous code
+console.log("Sync: " + fs.readdirSync('./'));
+
+// asynchronous code
+fs.readdir('./', (err, files) => {
+
+    if (err)
+        console.log(err);
+    else
+        console.log("Async: " + files);
+});
+console.log('Completed');
+------------------------------------
+
+// asynchronous code
+fs.readdir('$', (err, files) => {
+
+    if (err)
+        console.log(err);
+    else
+        console.log("Async: " + files);
+});
+console.log('Completed');
+
+{ [Error: ENOENT: no such file or directory, scandir 'C:\Node\Lab3\$']
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'scandir',
+  path: 'C:\\Node\\Lab3\\$' }
+
+
+Note: $ is invalid path.
+
+---------------------------------------------
+
+
+Events Modules
+---------------
+Event emitter is used to raise event.
+
+All objects that emit events are instances of the EventEmitter 
+class. These objects expose an eventEmitter.on()
+function that allows one or more functions to be 
+attached to named events emitted by the object.
+
+const EventEmitter = require('events');
+
+class MyEmitter extends EventEmitter {}
+
+const myEmitter = new MyEmitter();
+myEmitter.on('event', () => {
+  console.log('an event occurred!');
+});
+myEmitter.emit('event');
+
+
+NOTE: Event is technically is object, generally can be called as noise.
+
+
+Note: 
+
+
+const EventEmitter = require('events');
+
+// create object of an EventEmitter class to invoke functions 
+const emitter = new EventEmitter();
+
+// Raise an event using event object 
+emitter.emit('logging');
+
+// Register a event
+emitter.on('logging', function () {
+    console.log('Listener called');
+
+}); 
+
+NOTE: no output causes Raising of event was done before registration of event
+------------------------------------------------------------------------------
+testEvents.js
+--------------
+const EventEmitter = require('events');
+
+// create object of an EventEmitter class to invoke functions 
+const emitter = new EventEmitter();
+
+// Register a event
+emitter.on('logging', function () {
+    console.log('Listener called');
+
+});
+
+emitter.on('greeting', function () {
+    console.log('Welcome to NodeJS');
+
+});
+
+
+// Raise an event using event object 
+setTimeout(() => {
+    emitter.emit('logging');
+}, 2000)
+
+emitter.emit("greeting");
+
+----------------------------------------------------------------------------------
+
+
+Note: HTTP is given in node js and Express.js is 3rd party
+
+Share Event between multiple modules:
+-------------------------------------
+Logger.js
+---------
+const EventEmitter = require('events');
+
+class Logger extends EventEmitter {
+    log(message) {
+        // send an HTTP request   
+        console.log(message);
+        this.emit("messageLogged", { id: 1, url: 'http://' })
+    }
+
+
+}
+
+module.exports = Logger;
+
+
+testLogger.js
+-------------
+//import logger,js
+const LoggerClass = require('./logger');
+
+//making instance of logger.js
+const testLogger = new LoggerClass();
+
+// Register a listener
+testLogger.on('messageLogged', function (arg) {
+    console.log('Listener called:  ', arg.url);
+});
+
+// const log = require ('./logger'); 
+testLogger.log('This is from testLogger'); 
+
+
+-------------------
+>node testLogger
+This is from testLogger
+Listener called:   http://
+
+
+---------------------
+HTTP implementations
+---------------------
+httpserver.js
+-------------
+//loading the http so as to setup the webserver-listening over http
+const http = require('http');
+
+// create a web server 
+// The web server is an event emitter 
+// const server = http.createServer();
+
+// create a web server // The web server is an event emitter  
+const server = http.createServer(function (req, res) {
+    //design url
+    if (req.url === '/') { //base path :  http:localhost:3400
+        res.write('Welcome to HTTP');
+        res.end();
+    }
+
+    if (req.url === '/employee') {
+        console.log("Fetching from DB")
+        res.write('Fetched the data');
+        res.end();
+    }
+});
+
+//register the server to handle the request/response
+server.on('connection', function (socket) {
+    console.log("new connection...");
+});
+
+
+
+// when server is emitting an event, we will provide a handler to handle it
+// listen on port  
+server.listen(3400);
+
+console.log("Listening on port 3400");
+
+
+===========================================================================================================================================================
+24/04/19
+---------
+Day-5
+---------
+
+=> Http is directly not used in prod, instead use a wrapper and use it in prod.
+=>Create -Post
+=>Read - Get
+=>Update - Put
+=>Delete - Delete
+
+
+==> Http package: Express.js, Http-Package
+
+##Express app##
+
+npm init --yes
+npm install express --save// make entry of this dependency in package.jsom
+
+index.js
+--------
+//express module returns a function express
+// express() is a top-level function exported by the express module 
+
+var express = require('express')
+
+//setup webserver as well as invoke the function that returns an object
+var app = express()
+ 
+// listen on export app.listen(3000, () => 
+app.get('/', function (req, res) {
+  res.send('Hello World')
+})
+ 
+
+//listen to the port
+app.listen(3000)
+
+
+------------------------
+
+set PORT =5000
+
+inde.html
+----------
+<html>
+    <body>
+        <h1>
+File in response.
+
+        </h1>
+    </body>
+</html>
+
+
+//express module returns a function express
+// express() is a top-level function exported by the express module 
+
+var express = require('express')
+
+//setup webserver as well as invoke the function that returns an object
+var app = express()
+// var path = require('path');
+
+//middleware - JSON object
+app.use(express.json);
+
+const customers = [
+    { id: 1, name: 'priyanka' },
+    { id: 2, name: 'deb' },
+    { id: 3, name: 'john' },
+];
+
+
+
+
+//Demo
+//http request, GET-> body can't be present by header can be there.
+app.get('/', function (req, res) {
+    //return string
+    // res.send('Hello World')// res.send() =  res.write()+ res.end();
+
+    //return object
+    // res.send({id: 1, name:'priyanka'});
+
+    //return file
+    res.sendFile(__dirname + '/index.html');
+
+});
+
+//get by id
+app.get('/api/customer/:id/:name', (req, res) => {
+    res.send("Id :" + req.params.id + " name: " + req.params.name);
+});
+
+//Query param
+//http://localhost:3000/api/customer/?sortBy=id
+app.get('/api/customer/?', (req, res) => {
+    res.send('sortBy: ' + req.query.sortBy);
+});
+
+
+
+//POST
+app.post('/api/customer/create', (req, res) => {
+    const customer = {
+        id: customers.length + 1,
+        name: req.body.name,
+    }
+
+    customers.push(customer);
+    res.send(customer);
+});
+
+//List all the customers
+app.get('/api/customer/list', (req, res) => {
+    res.send(customers);
+});
+
+
+// listen on export app.listen(3000, () =>
+app.listen(3000, () =>
+    console.log("Connected to server")
+)
+------------------------------------------------------------------------
+===========================================================================================================================================
+25/04/2019
+-----------
+Day-6
+------
+#Socket programming
+--------------------
+
+
+Chat bot:
+Machine -- IP Address(8080,4433,9001)
+
+Machine - IP address
+(172.0.0.1) - 8080(Port number)
+
+Definition: A socket is one endpoint of a two-way communication link between two programs running on the network.
+
+-> Data packeets are communicated betweeen sockets
+
+Socket programing:
+https://www.tutorialspoint.com/socket.io/
+
+Jquery:
+https://www.w3schools.com/jquery/
+
+
+
+index.html
+----------
+<html>
+ <head>
+
+       <title>Chat with socket.io and Node.js</title>
+       <style>
+           #chat{
+               height : 500px;
+           }
+       </style>
+  </head>
+
+  <body>
+     <div id="chat"></div>
+     <form id="send-message">
+           <input size="35" id="message"></input>
+           <input type="submit"></input>
+     </form>
+
+     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+     <!-- allows client to connect to the server using socket-->
+     <script src="/socket.io/socket.io.js"></script>
+     <script>
+         jQuery(function($){
+             var socket = io.connect();
+             var $messageForm = $('#send-message');
+             var $messageBox = $('#message');
+             var $chat = $('#chat');
+
+             console.log($messageBox.val());
+             $messageForm.submit((e) =>{
+                      e.preventDefault();
+                      socket.emit('send message', $messageBox.val());
+                      $messageBox.val('');
+             });
+
+             // process message on client side
+             socket.on('new message', (data) =>{
+                    $chat.append(data + "<br/>");
+             });
+         });
+     </script>
+
+  </body>
+</html>
+
+
+
+
+index.js
+--------
+var express = require('express');
+
+const app = express();
+
+const server = require('http').createServer(app);
+
+const io = require('socket.io').listen(server);
+
+
+
+app.get('/', (req, res) => {
+
+      res.sendFile(__dirname + '/index.html');
+});
+
+// server-side socket
+io.sockets.on('connection', (socket) =>{
+  socket.on('send message', (data) =>{
+         console.log(data);
+        // emit message to all users including sender
+         io.sockets.emit('new message', data);
+       
+  });
+})
+server.listen(3000);
+--------------------------------------------------------------
+
+=> Note don't use nodemon, its good for express js
+
+##MongoDB##
+
+- Download Community edition: MongoDb server
+- Create Account in - MongoDB atlas Global Cloud Database
+
+
+-Mlab MongoDB
+-mlab.com/home
+
+
+Refer the labs
+--------------------------------------------------------------------------------------------------------------------------------------
+
+===
+END
+===
+
+1. Callback, promise, async/await
+2. Event loop and related concepts.
+3. Cloud mongo db
+4. Authentication and authoriation
+5. ORM for database
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
